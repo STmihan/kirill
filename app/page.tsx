@@ -1,21 +1,48 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Trophy, Crosshair, TrendingUp, X, Check, Wallet, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Trophy, Crosshair, TrendingUp, X, Check, Wallet, ArrowRight, Activity } from 'lucide-react';
 
 export default function KirillLanding() {
     const [loanAmount, setLoanAmount] = useState<number>(5000);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // Состояние для счетчика общего долга
+    const [totalDebt, setTotalDebt] = useState<number>(0);
+
     const ddragonVer = "15.23.1";
-
     const champions = ["Aphelios", "Twitch", "Kaisa"];
-
     const winrate = 50.8;
     const deltaPerWeek = 0.8;
 
+    // --- КОНСТАНТЫ ДЛЯ СЧЕТЧИКА ---
+    // Начальный долг: от 2.5 млн до 5 млн
+    const INITIAL_DEBT_MIN = 22000;
+    const INITIAL_DEBT_MAX = 80000;
+    // На сколько растет автоматически (от 100 до 1500 руб)
+    const AUTO_INC_MIN = 100;
+    const AUTO_INC_MAX = 1500;
+    // Интервал обновления (в миллисекундах)
+    const UPDATE_INTERVAL = 3000;
+
+    // Инициализация и таймер "живого долга"
+    useEffect(() => {
+        // Устанавливаем начальное значение только на клиенте
+        const startValue = Math.floor(Math.random() * (INITIAL_DEBT_MAX - INITIAL_DEBT_MIN + 1)) + INITIAL_DEBT_MIN;
+        setTotalDebt(startValue);
+
+        const interval = setInterval(() => {
+            const addition = Math.floor(Math.random() * (AUTO_INC_MAX - AUTO_INC_MIN + 1)) + AUTO_INC_MIN;
+            setTotalDebt((prev) => prev + addition);
+        }, UPDATE_INTERVAL);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const handleLend = () => {
         setIsModalOpen(true);
+        // Моментально увеличиваем общий долг на сумму, которую выбрал пользователь
+        setTotalDebt((prev) => prev + loanAmount);
     };
 
     return (
@@ -66,7 +93,6 @@ export default function KirillLanding() {
                     <div className="relative group">
                         <div className="absolute -inset-1 bg-gradient-to-r from-emerald-400 to-teal-400 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
                         <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/5] md:aspect-square">
-                            {/* ЗАМЕНИТЕ SRC НА ПУТЬ К ФАЙЛУ С АПЕЛЬСИНАМИ */}
                             <img
                                 src="/kirill/images/kirill-main.jpg"
                                 alt="Кирилл Успешный"
@@ -129,7 +155,6 @@ export default function KirillLanding() {
 
                     {/* Screenshot Integration */}
                     <div className="mt-12 rounded-2xl overflow-hidden shadow-xl border border-slate-200 opacity-90 grayscale hover:grayscale-0 transition-all duration-500">
-                        {/* ЗАМЕНИТЕ SRC НА ПУТЬ К СКРИНШОТУ ПРОФИЛЯ */}
                         <img src="/kirill/images/lol-profile.jpg" alt="LoL Profile" className="w-full object-cover" />
                     </div>
                 </div>
@@ -184,8 +209,30 @@ export default function KirillLanding() {
                 </div>
             </section>
 
+            {/* --- DEBT COUNTER SECTION (NEW) --- */}
+            <section className="py-20 bg-slate-950 text-white border-t border-slate-800">
+                <div className="max-w-6xl mx-auto px-4">
+                    <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
+
+                        {/* Блок "Занял" */}
+                        <div className="flex-1 w-full bg-slate-900/50 p-8 rounded-2xl border border-slate-800 text-center hover:border-emerald-500/30 transition-colors">
+                            <div className="flex items-center justify-center gap-2 mb-4 text-emerald-400">
+                                <Activity className="w-5 h-5 animate-pulse" />
+                                <span className="text-sm font-bold uppercase tracking-wider">Инвестированно</span>
+                            </div>
+                            <div className="text-4xl md:text-5xl font-mono font-bold text-white mb-2 tabular-nums">
+                                {totalDebt > 0 ? totalDebt.toLocaleString('ru-RU') : 'Загрузка...'} ₽
+                            </div>
+                            <p className="text-slate-500 text-sm">
+                                Статистика обновляется
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* --- FOOTER --- */}
-            <footer className="bg-slate-900 text-slate-500 py-8 text-center text-sm">
+            <footer className="bg-slate-900 text-slate-500 py-8 text-center text-sm border-t border-slate-800">
                 <p>© 2025 Кирилл Corp. Все права (и долги) защищены.</p>
             </footer>
 
@@ -229,4 +276,3 @@ export default function KirillLanding() {
         </main>
     );
 }
-
