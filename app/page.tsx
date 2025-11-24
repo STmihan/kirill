@@ -68,7 +68,7 @@ export default function KirillLanding() {
                         <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-[4/5] md:aspect-square">
                             {/* ЗАМЕНИТЕ SRC НА ПУТЬ К ФАЙЛУ С АПЕЛЬСИНАМИ */}
                             <img
-                                src="/images/kirill-main.jpg"
+                                src="/kirill/images/kirill-main.jpg"
                                 alt="Кирилл Успешный"
                                 className="object-cover w-full h-full transform hover:scale-105 transition duration-700"
                             />
@@ -130,7 +130,7 @@ export default function KirillLanding() {
                     {/* Screenshot Integration */}
                     <div className="mt-12 rounded-2xl overflow-hidden shadow-xl border border-slate-200 opacity-90 grayscale hover:grayscale-0 transition-all duration-500">
                         {/* ЗАМЕНИТЕ SRC НА ПУТЬ К СКРИНШОТУ ПРОФИЛЯ */}
-                        <img src="/images/lol-profile.jpg" alt="LoL Profile" className="w-full object-cover" />
+                        <img src="/kirill/images/lol-profile.jpg" alt="LoL Profile" className="w-full object-cover" />
                     </div>
                 </div>
             </section>
